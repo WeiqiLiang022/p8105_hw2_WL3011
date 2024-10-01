@@ -9,6 +9,7 @@ output: html_document
 ```{r setup, message = FALSE, results='hide'}
 library(tidyverse)
 library(dplyr)
+library(readxl)
 ```
 
 ## I. Problem 1
@@ -106,3 +107,20 @@ a_train_stations_ADA = Reformat_subway_df |>
   nrow()
 ```
 There are `r a_train_stations_ADA` ADA compliant stations serve the A train.
+
+## II. Problem 2
+
+```{r}
+# Load the Trash Wheel xlsx
+trash_wheel_path = "./202309 Trash Wheel Collection Data.xlsx"
+trash_wheel = 
+  readxl::read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", 
+                     skip = 1, na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  select(dumpster:homes_powered) |>
+  drop_na(dumpster) |>
+  mutate(
+    sports_balls_integer = as.integer(round(sports_balls))
+    )
+```
+

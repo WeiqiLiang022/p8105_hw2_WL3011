@@ -5,16 +5,16 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-## Setup file
+## Setup File
 ```{r setup, message = FALSE, results='hide'}
 library(tidyverse)
 library(dplyr)
 ```
 
-## 1. Problem 1
+## I. Problem 1
 Firstly load the NYC subway dataset and clean the data.
 
-**Data cleaning:**
+### 1.1 Data Cleaning
 
 *   Retained columns: `Line`, `Station Name`, `Station Latitude`, `Station Longitude`, `Route1`:`Route11`, `Entry`, `Vending`, `Entrance Type`, `ADA`;
 *   Converted the `Entry` variable from "YES" and "NO" to logical TRUE and FALSE.
@@ -34,4 +34,75 @@ subway_df =
       )
     )
 ```
-The dataset now is tidy, with each row representing a station entrance and all columns having consistent data types. it has `r nrow(subway_df)` rows and `r ncol(subway_df)` columns.
+The dataset now is tidy, with each row representing a station entrance and all columns having consistent data types. It has `r nrow(subway_df)` rows and `r ncol(subway_df)` columns, showing New York City subway station entrances/exits. The columns include:
+
+**Station details**: Line, Station Name
+
+**Routes**: Route1 to Route11, showing the subway lines served at the station
+
+**Facilities**: Entrance Type, Entry, Vending, ADA (compliance), and ADA Notes
+
+**Geographical details**: Entrance Latitude/Longitude, North/South and East/West Streets
+
+### 1.2 Answering the Following Question
+1.  How many distinct stations are there?
+```{r results='hide'}
+# calculate the number of distinct stations (identified by name and line)
+distinct_stations = subway_df |>
+  distinct(station_name, line) |>
+  nrow()
+```
+There are `r distinct_stations` distinct stations, identified by their name and line.
+
+2.  How many stations are ADA compliant?
+```{r results='hide'}
+# the number of ADA compliant stations
+ada_compliant_stations = subway_df |>
+  filter(ada == TRUE) |>
+  nrow()
+```
+There are `r ada_compliant_stations` ADA compliant stations.
+
+3.  What proportion of station entrances / exits without vending allow entrance?
+```{r results='hide'}
+no_vending_entry = subway_df |>
+  filter(vending == "NO") |>
+  filter(entry == "YES" ) |>
+  nrow()
+proportion = no_vending_entry/nrow(subway_df)
+```
+The proportion of station entrances without vending allow entrance is `r proportion`.
+
+### 1.3 Reformat Dataset
+1.  Reformat data so that route number and route name are distinct variables.
+```{r}
+# Split route to long format (pivot_longer)
+Reformat_subway_df = subway_df |>
+  mutate_at(vars(route1:route11), as.character) |>
+  pivot_longer(
+    cols = route1:route11, 
+    names_to = "route_number", 
+    values_to = "route_name"
+    ) |>
+  filter(!is.na(route_name))  # remove NA
+```
+
+2.  How many distinct stations serve the A train? 
+```{r results='hide'}
+# number of stations which serve A train
+a_train_stations = Reformat_subway_df |>
+  filter(route_name == "A") |>
+  distinct(station_name, line) |>
+  nrow()
+```
+There are `r a_train_stations` stations serve the A train.
+
+3.  Of the stations that serve the A train, how many are ADA compliant?
+```{r results='hide'}
+# number of ADA compliant stations which serve A train
+a_train_stations_ADA = Reformat_subway_df |>
+  filter(route_name == "A", ada == TRUE) |>
+  distinct(station_name, line) |>
+  nrow()
+```
+There are `r a_train_stations_ADA` ADA compliant stations serve the A train.

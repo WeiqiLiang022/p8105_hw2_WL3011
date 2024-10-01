@@ -11,7 +11,7 @@
 
 <meta name="author" content="Weiqi Liang" />
 
-<meta name="date" content="2024-09-30" />
+<meta name="date" content="2024-10-01" />
 
 <title>p8105_hw2_WL3011</title>
 
@@ -352,20 +352,21 @@ display: none;
 
 <h1 class="title toc-ignore">p8105_hw2_WL3011</h1>
 <h4 class="author">Weiqi Liang</h4>
-<h4 class="date">2024-09-30</h4>
+<h4 class="date">2024-10-01</h4>
 
 </div>
 
 
 <div id="setup-file" class="section level2">
-<h2>Setup file</h2>
+<h2>Setup File</h2>
 <pre class="r"><code>library(tidyverse)
 library(dplyr)</code></pre>
 </div>
-<div id="problem-1" class="section level2">
-<h2>1. Problem 1</h2>
+<div id="i.-problem-1" class="section level2">
+<h2>I. Problem 1</h2>
 <p>Firstly load the NYC subway dataset and clean the data.</p>
-<p><strong>Data cleaning:</strong></p>
+<div id="data-cleaning" class="section level3">
+<h3>1.1 Data Cleaning</h3>
 <ul>
 <li>Retained columns: <code>Line</code>, <code>Station Name</code>,
 <code>Station Latitude</code>, <code>Station Longitude</code>,
@@ -389,8 +390,83 @@ subway_df =
       )
     )</code></pre>
 <p>The dataset now is tidy, with each row representing a station
-entrance and all columns having consistent data types. it has 1868 rows
-and 20 columns.</p>
+entrance and all columns having consistent data types. It has 1868 rows
+and 20 columns, showing New York City subway station entrances/exits.
+The columns include:</p>
+<p><strong>Station details</strong>: Line, Station Name</p>
+<p><strong>Routes</strong>: Route1 to Route11, showing the subway lines
+served at the station</p>
+<p><strong>Facilities</strong>: Entrance Type, Entry, Vending, ADA
+(compliance), and ADA Notes</p>
+<p><strong>Geographical details</strong>: Entrance Latitude/Longitude,
+North/South and East/West Streets</p>
+</div>
+<div id="answering-the-following-question" class="section level3">
+<h3>1.2 Answering the Following Question</h3>
+<ol style="list-style-type: decimal">
+<li>How many distinct stations are there?</li>
+</ol>
+<pre class="r"><code># calculate the number of distinct stations (identified by name and line)
+distinct_stations = subway_df |&gt;
+  distinct(station_name, line) |&gt;
+  nrow()</code></pre>
+<p>There are 465 distinct stations, identified by their name and
+line.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>How many stations are ADA compliant?</li>
+</ol>
+<pre class="r"><code># the number of ADA compliant stations
+ada_compliant_stations = subway_df |&gt;
+  filter(ada == TRUE) |&gt;
+  nrow()</code></pre>
+<p>There are 468 ADA compliant stations.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>What proportion of station entrances / exits without vending allow
+entrance?</li>
+</ol>
+<pre class="r"><code>no_vending_entry = subway_df |&gt;
+  filter(vending == &quot;NO&quot;) |&gt;
+  filter(entry == &quot;YES&quot; ) |&gt;
+  nrow()
+proportion = no_vending_entry/nrow(subway_df)</code></pre>
+<p>The proportion of station entrances without vending allow entrance is
+0.0369379.</p>
+</div>
+<div id="reformat-dataset" class="section level3">
+<h3>1.3 Reformat Dataset</h3>
+<ol style="list-style-type: decimal">
+<li>Reformat data so that route number and route name are distinct
+variables.</li>
+</ol>
+<pre class="r"><code># Split route to long format (pivot_longer)
+Reformat_subway_df = subway_df |&gt;
+  mutate_at(vars(route1:route11), as.character) |&gt;
+  pivot_longer(
+    cols = route1:route11, 
+    names_to = &quot;route_number&quot;, 
+    values_to = &quot;route_name&quot;
+    ) |&gt;
+  filter(!is.na(route_name))  # remove NA</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>How many distinct stations serve the A train?</li>
+</ol>
+<pre class="r"><code># number of stations which serve A train
+a_train_stations = Reformat_subway_df |&gt;
+  filter(route_name == &quot;A&quot;) |&gt;
+  distinct(station_name, line) |&gt;
+  nrow()</code></pre>
+<p>There are 60 stations serve the A train.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Of the stations that serve the A train, how many are ADA
+compliant?</li>
+</ol>
+<pre class="r"><code># number of ADA compliant stations which serve A train
+a_train_stations_ADA = Reformat_subway_df |&gt;
+  filter(route_name == &quot;A&quot;, ada == TRUE) |&gt;
+  distinct(station_name, line) |&gt;
+  nrow()</code></pre>
+<p>There are 17 ADA compliant stations serve the A train.</p>
+</div>
 </div>
 
 

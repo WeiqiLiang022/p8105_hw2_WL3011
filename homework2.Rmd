@@ -1,0 +1,37 @@
+---
+title: "p8105_hw2_WL3011"
+author: "Weiqi Liang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Setup file
+```{r setup, message = FALSE, results='hide'}
+library(tidyverse)
+library(dplyr)
+```
+
+## 1. Problem 1
+Firstly load the NYC subway dataset and clean the data.
+
+**Data cleaning:**
+
+*   Retained columns: `Line`, `Station Name`, `Station Latitude`, `Station Longitude`, `Route1`:`Route11`, `Entry`, `Vending`, `Entrance Type`, `ADA`;
+*   Converted the `Entry` variable from "YES" and "NO" to logical TRUE and FALSE.
+```{r}
+# Load the NYC Subway csv
+subway_df = 
+  read.csv("./NYC_Transit_Subway_Entrance_And_Exit_Data.csv", 
+           na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  select(line, station_name, station_latitude, station_longitude,
+         route1:route11, entry, vending, entrance_type, ada) |>
+  mutate(
+    entry_logical = case_match(
+      entry, 
+      "YES" ~ TRUE,
+      "NO"  ~ FALSE
+      )
+    )
+```
+The dataset now is tidy, with each row representing a station entrance and all columns having consistent data types. it has `r nrow(subway_df)` rows and `r ncol(subway_df)` columns.

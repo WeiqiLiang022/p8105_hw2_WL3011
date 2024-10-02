@@ -360,13 +360,13 @@ display: none;
 <div id="setup-file" class="section level2">
 <h2>Setup File</h2>
 <pre class="r"><code>library(tidyverse)
-library(dplyr)</code></pre>
+library(dplyr)
+library(readxl)</code></pre>
 </div>
 <div id="i.-problem-1" class="section level2">
 <h2>I. Problem 1</h2>
-<p>Firstly load the NYC subway dataset and clean the data.</p>
-<div id="data-cleaning" class="section level3">
-<h3>1.1 Data Cleaning</h3>
+<div id="load-the-nyc-subway-dataset" class="section level3">
+<h3>1.1 Load the NYC Subway Dataset</h3>
 <ul>
 <li>Retained columns: <code>Line</code>, <code>Station Name</code>,
 <code>Station Latitude</code>, <code>Station Longitude</code>,
@@ -446,7 +446,20 @@ Reformat_subway_df = subway_df |&gt;
     names_to = &quot;route_number&quot;, 
     values_to = &quot;route_name&quot;
     ) |&gt;
-  filter(!is.na(route_name))  # remove NA</code></pre>
+  filter(!is.na(route_name))  # remove NA
+
+head(Reformat_subway_df)</code></pre>
+<pre><code>## # A tibble: 6 × 11
+##   line     station_name station_latitude station_longitude entry vending
+##   &lt;chr&gt;    &lt;chr&gt;                   &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+## 1 4 Avenue 25th St                  40.7             -74.0 YES   YES    
+## 2 4 Avenue 25th St                  40.7             -74.0 YES   YES    
+## 3 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## 4 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## 5 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## 6 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## # ℹ 5 more variables: entrance_type &lt;chr&gt;, ada &lt;lgl&gt;, entry_logical &lt;lgl&gt;,
+## #   route_number &lt;chr&gt;, route_name &lt;chr&gt;</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>How many distinct stations serve the A train?</li>
 </ol>
@@ -466,6 +479,32 @@ a_train_stations_ADA = Reformat_subway_df |&gt;
   distinct(station_name, line) |&gt;
   nrow()</code></pre>
 <p>There are 17 ADA compliant stations serve the A train.</p>
+</div>
+</div>
+<div id="ii.-problem-2" class="section level2">
+<h2>II. Problem 2</h2>
+<div id="load-the-mr.-trash-wheel-sheet" class="section level3">
+<h3>2.1 Load the Mr. Trash Wheel Sheet</h3>
+<ul>
+<li>Import the <strong>Mr. Trash Wheel</strong> sheet, while omitting
+non-data entries;</li>
+<li>Omit rows that do not include dumpster-specific data;</li>
+<li>Round the number of <code>sports_balls</code>.</li>
+</ul>
+<pre class="r"><code># Load the Trash Wheel xlsx
+trash_wheel_path = &quot;./202309 Trash Wheel Collection Data.xlsx&quot;
+trash_wheel = 
+  readxl::read_excel(&quot;./202309 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, 
+                     skip = 1, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
+  janitor::clean_names() |&gt;
+  select(dumpster:homes_powered) |&gt;
+  drop_na(dumpster) |&gt;
+  mutate(
+    sports_balls_integer = as.integer(round(sports_balls))
+    )</code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
 </div>
 </div>
 

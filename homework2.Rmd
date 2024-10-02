@@ -13,9 +13,8 @@ library(readxl)
 ```
 
 ## I. Problem 1
-Firstly load the NYC subway dataset and clean the data.
 
-### 1.1 Data Cleaning
+### 1.1 Load the NYC Subway Dataset
 
 *   Retained columns: `Line`, `Station Name`, `Station Latitude`, `Station Longitude`, `Route1`:`Route11`, `Entry`, `Vending`, `Entrance Type`, `ADA`;
 *   Converted the `Entry` variable from "YES" and "NO" to logical TRUE and FALSE.
@@ -86,6 +85,8 @@ Reformat_subway_df = subway_df |>
     values_to = "route_name"
     ) |>
   filter(!is.na(route_name))  # remove NA
+
+head(Reformat_subway_df)
 ```
 
 2.  How many distinct stations serve the A train? 
@@ -110,11 +111,16 @@ There are `r a_train_stations_ADA` ADA compliant stations serve the A train.
 
 ## II. Problem 2
 
+### 2.1 Load the Mr. Trash Wheel Sheet
+*   Import the  **Mr. Trash Wheel** sheet, while omitting non-data entries;
+*   Omit rows that do not include dumpster-specific data;
+*   Round the number of `sports_balls`.
+
 ```{r}
 # Load the Trash Wheel xlsx
-trash_wheel_path = "./202309 Trash Wheel Collection Data.xlsx"
+trash_wheel_path = "./202409 Trash Wheel Collection Data.xlsx"
 trash_wheel = 
-  readxl::read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", 
+  readxl::read_excel(trash_wheel_path, sheet = "Mr. Trash Wheel", 
                      skip = 1, na = c("NA", ".", "")) |>
   janitor::clean_names() |>
   select(dumpster:homes_powered) |>

@@ -12,6 +12,8 @@ library(tidyverse)
 library(dplyr)
 library(readxl)
 library(haven)
+library(knitr)
+library(kableExtra)
 ```
 
 ## I. Problem 1
@@ -72,7 +74,12 @@ no_vending_entry = subway_df |>
   filter(vending == "NO") |>
   filter(entry == "YES" ) |>
   nrow()
-proportion = no_vending_entry/nrow(subway_df)
+
+no_vending = subway_df |>
+  filter(vending == "NO") |>
+  nrow()
+
+proportion = no_vending_entry/no_vending
 ```
 The proportion of station entrances without vending allow entrance is `r proportion`.
 
@@ -129,7 +136,7 @@ MTW =
   select(dumpster:homes_powered) |>
   drop_na(dumpster) |>
   mutate(
-    sports_balls_integer = as.integer(round(sports_balls))
+    sports_balls = as.integer(round(sports_balls))
     )
 ```
 
@@ -303,18 +310,11 @@ Filter results for Seasons 5 to 10 and select Star Baker.
 ```{r}
 star_baker_df = results_df |>
   filter(series >= 5 & series <= 10, result %in% c("STAR BAKER", "WINNER")) |>
-  select(series, episode, baker, result) |>
-  mutate(result = case_match(
-    result,
-    "WINNER" ~ "STAR BAKER",
-    .default = result)
-  ) 
+  select(series, episode, baker, result) 
 ```
 
 Create a table to show star bakers in Season 5 to 10, organizing by series and episode.
 ```{r}
-library(knitr)
-library(kableExtra)
 star_baker_df |>
   arrange(series, episode) |>
   kable(caption = "Star Baker and Winners for Seasons 5 to 10",
@@ -329,7 +329,7 @@ baker_frequency = star_baker_df |>
 head(baker_frequency)
 ```
 
-*    **Predictable Overall Winners:** *Richard Burr* won STAR BAKER 5 times, which is the most of all bakers. *Candice Brown*, *Nadiya Hussain* and *Steph Blackwell* won 4 times. Additionally, *Richard Burr* from series 5, *Ian Cumming* and *Nadiya Hussain* from series 6, *Steph Blackwell* from series 10 all consistently achieved STAR BAKER during their own series. To summarize, **Richard Burr** is the most predictable overall winners.
+*    **Predictable Overall Winners:** *Richard Burr* won STAR BAKER 5 times, which is the most of all bakers. *Candice Brown*, *Nadiya Hussain* and *Steph Blackwell* won 4 times. Additionally, *Richard Burr* from series 5, *Ian Cumming* and *Nadiya Hussain* from series 6, *Steph Blackwell* from series 10 all consistently achieved STAR BAKER during their own series. However, only *Nadiya Hussain* became the final WINNER in series 6 episode 10. To summarize, **Nadiya Hussain** is the most predictable overall winners.
 
 *    **Surprises:** It is surprising that **David Atherton** from series 10 was crowned STAR BAKER in episode 10, even though he did not won anyone before. 
 

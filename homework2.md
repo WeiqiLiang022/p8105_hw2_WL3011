@@ -10,6 +10,8 @@ library(tidyverse)
 library(dplyr)
 library(readxl)
 library(haven)
+library(knitr)
+library(kableExtra)
 ```
 
 ## I. Problem 1
@@ -88,11 +90,16 @@ no_vending_entry = subway_df |>
   filter(vending == "NO") |>
   filter(entry == "YES" ) |>
   nrow()
-proportion = no_vending_entry/nrow(subway_df)
+
+no_vending = subway_df |>
+  filter(vending == "NO") |>
+  nrow()
+
+proportion = no_vending_entry/no_vending
 ```
 
 The proportion of station entrances without vending allow entrance is
-0.0369379.
+0.3770492.
 
 ### 1.3 Reformat Dataset
 
@@ -167,7 +174,7 @@ MTW =
   select(dumpster:homes_powered) |>
   drop_na(dumpster) |>
   mutate(
-    sports_balls_integer = as.integer(round(sports_balls))
+    sports_balls = as.integer(round(sports_balls))
     )
 ```
 
@@ -215,7 +222,7 @@ trash_wheel_df =
 |                 | Mr. Trash Wheel | Professor Trash Wheel | Gwynnda Trash Wheel | trash_wheel_df |
 |:---------------:|:---------------:|:---------------------:|:-------------------:|:--------------:|
 | **observation** |       651       |          118          |         263         |      1032      |
-|  **variable**   |       16        |          14           |         13          |       16       |
+|  **variable**   |       15        |          14           |         13          |       15       |
 
 Compared to **Mr. Trash Wheel**, **Professor Trash Wheel** and **Gwynnda
 Trash Wheel** are missing `sports_balls` and `glass_bottles` &
@@ -394,28 +401,11 @@ Filter results for Seasons 5 to 10 and select Star Baker.
 ``` r
 star_baker_df = results_df |>
   filter(series >= 5 & series <= 10, result %in% c("STAR BAKER", "WINNER")) |>
-  select(series, episode, baker, result) |>
-  mutate(result = case_match(
-    result,
-    "WINNER" ~ "STAR BAKER",
-    .default = result)
-  ) 
+  select(series, episode, baker, result) 
 ```
 
 Create a table to show star bakers in Season 5 to 10, organizing by
 series and episode.
-
-``` r
-library(knitr)
-library(kableExtra)
-```
-
-    ## 
-    ## 载入程序包：'kableExtra'
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     group_rows
 
 ``` r
 star_baker_df |>
@@ -584,7 +574,7 @@ STAR BAKER
 Nancy
 </td>
 <td style="text-align:left;background-color: lightgray !important;">
-STAR BAKER
+WINNER
 </td>
 </tr>
 <tr>
@@ -724,7 +714,7 @@ STAR BAKER
 Nadiya
 </td>
 <td style="text-align:left;">
-STAR BAKER
+WINNER
 </td>
 </tr>
 <tr>
@@ -864,7 +854,7 @@ STAR BAKER
 Candice
 </td>
 <td style="text-align:left;background-color: lightgray !important;">
-STAR BAKER
+WINNER
 </td>
 </tr>
 <tr>
@@ -1004,7 +994,7 @@ STAR BAKER
 Sophie
 </td>
 <td style="text-align:left;">
-STAR BAKER
+WINNER
 </td>
 </tr>
 <tr>
@@ -1144,7 +1134,7 @@ STAR BAKER
 Rahul
 </td>
 <td style="text-align:left;background-color: lightgray !important;">
-STAR BAKER
+WINNER
 </td>
 </tr>
 <tr>
@@ -1284,7 +1274,7 @@ STAR BAKER
 David
 </td>
 <td style="text-align:left;">
-STAR BAKER
+WINNER
 </td>
 </tr>
 </tbody>
@@ -1309,8 +1299,9 @@ head(baker_frequency)
   Hussain* and *Steph Blackwell* won 4 times. Additionally, *Richard
   Burr* from series 5, *Ian Cumming* and *Nadiya Hussain* from series 6,
   *Steph Blackwell* from series 10 all consistently achieved STAR BAKER
-  during their own series. To summarize, **Richard Burr** is the most
-  predictable overall winners.
+  during their own series. However, only *Nadiya Hussain* became the
+  final WINNER in series 6 episode 10. To summarize, **Nadiya Hussain**
+  is the most predictable overall winners.
 
 - **Surprises:** It is surprising that **David Atherton** from series 10
   was crowned STAR BAKER in episode 10, even though he did not won

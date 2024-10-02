@@ -262,16 +262,16 @@ results_df = read.csv("./gbb_datasets/results.csv", skip = 2,
 #anti_join(x, y, by = "key")  x have while y donot have
 missing_bakers = anti_join(results_df, bakers_df, by = "baker") 
 
-head(missing_bakers)
+missing_bakers
 ```
 The results show that Joanne's series 2 episodes 1-6 is present in the `results_df`, but not in the `bakers_df`.
 
-*   Identify if any baker in `results_df` is missing from the `bakes_df`.
+*   Identify if any baker's bake in `results_df` is missing from the `bakes_df`.
 ```{r}
 missing_bakes = anti_join(results_df, bakes_df, by = c("baker", "episode")) 
-head(missing_bakers)
+summary(missing_bakes)
 ```
-The results confirm that Joanne is not recorded in `bakes_df` as well.
+The results shows that `r n_distinct(missing_bakes$baker)` bakers' bakes are missing from the `bakes_df`.
 
 ### 3.3 Merge Datasets
 ```{r}
@@ -286,8 +286,13 @@ final_df =
   combined_df |>
   select(series, episode, baker_name, technical, result, signature_bake, show_stopper, baker_age, hometown, baker_occupation) |>
   arrange(series, episode,technical)
-```
 
+# export the final_df as csv
+write_csv(final_df, "./gbb_datasets/Great British Bake Off.csv")
+```
+The final dataset `final_df` has `r nrow(final_df)` observations and `r ncol(final_df)` variables. 
+
+In line with the preferences of viewers, this article places The Show's `series` and `eposide` at the top of the dataset, followed by `Bakers' Name` and their `technical`. The following are personal characteristics and background information about each baker, including `signature bake`, `show stopper bake`, `age`, `hometown`, and `occupation status`. 
 ### 3.4
 ```{r}
 viewers_df = read.csv("./gbb_datasets/viewers.csv", 

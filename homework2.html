@@ -662,38 +662,69 @@ marks are added. Modify it with <code>casematch</code>.</p></li>
 <pre class="r"><code>#anti_join(x, y, by = &quot;key&quot;)  x have while y donot have
 missing_bakers = anti_join(results_df, bakers_df, by = &quot;baker&quot;) 
 
-head(missing_bakers)</code></pre>
+missing_bakers</code></pre>
 <pre><code>##   series episode  baker technical     result
 ## 1      2       1 Joanne        11         IN
 ## 2      2       2 Joanne        10         IN
 ## 3      2       3 Joanne         1         IN
 ## 4      2       4 Joanne         8         IN
 ## 5      2       5 Joanne         6         IN
-## 6      2       6 Joanne         1 STAR BAKER</code></pre>
+## 6      2       6 Joanne         1 STAR BAKER
+## 7      2       7 Joanne         3         IN
+## 8      2       8 Joanne         1     WINNER</code></pre>
 <p>The results show that Joanne’s series 2 episodes 1-6 is present in
 the <code>results_df</code>, but not in the <code>bakers_df</code>.</p>
 <ul>
-<li>Identify if any baker in <code>results_df</code> is missing from the
-<code>bakes_df</code>.</li>
+<li>Identify if any baker’s bake in <code>results_df</code> is missing
+from the <code>bakes_df</code>.</li>
 </ul>
 <pre class="r"><code>missing_bakes = anti_join(results_df, bakes_df, by = c(&quot;baker&quot;, &quot;episode&quot;)) 
-head(missing_bakers)</code></pre>
-<pre><code>##   series episode  baker technical     result
-## 1      2       1 Joanne        11         IN
-## 2      2       2 Joanne        10         IN
-## 3      2       3 Joanne         1         IN
-## 4      2       4 Joanne         8         IN
-## 5      2       5 Joanne         6         IN
-## 6      2       6 Joanne         1 STAR BAKER</code></pre>
-<p>The results confirm that Joanne is not recorded in
-<code>bakes_df</code> as well.</p>
+summary(missing_bakes)</code></pre>
+<pre><code>##      series          episode          baker             technical     
+##  Min.   : 1.000   Min.   : 1.000   Length:554         Min.   : 1.000  
+##  1st Qu.: 4.000   1st Qu.: 4.000   Class :character   1st Qu.: 3.000  
+##  Median : 7.000   Median : 7.000   Mode  :character   Median : 5.000  
+##  Mean   : 6.699   Mean   : 6.377                      Mean   : 5.075  
+##  3rd Qu.: 9.000   3rd Qu.: 9.000                      3rd Qu.: 7.000  
+##  Max.   :10.000   Max.   :10.000                      Max.   :13.000  
+##                                                       NA&#39;s   :408     
+##     result         
+##  Length:554        
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+##                    
+## </code></pre>
+<p>The results shows that 84 bakers’ bakes are missing from the
+<code>bakes_df</code>.</p>
 </div>
 <div id="merge-datasets" class="section level3">
 <h3>3.3 Merge Datasets</h3>
-<pre class="r"><code># Merge datasets</code></pre>
-</div>
-<div id="section" class="section level3">
-<h3>3.4</h3>
+<pre class="r"><code># Merge all 3 datasets
+combined_df = 
+  results_df |&gt;
+  left_join(bakers_df, by = c(&quot;baker&quot;, &quot;series&quot;)) |&gt;
+  left_join(bakes_df, by = c(&quot;baker&quot;, &quot;series&quot;, &quot;episode&quot;))
+
+# Reorganize the variables to be meaningful
+final_df =
+  combined_df |&gt;
+  select(series, episode, baker_name, technical, result, signature_bake, show_stopper, baker_age, hometown, baker_occupation) |&gt;
+  arrange(series, episode,technical)
+
+# export the final_df as csv
+write_csv(final_df, &quot;./gbb_datasets/Great British Bake Off.csv&quot;)</code></pre>
+<p>The final dataset <code>final_df</code> has 1136 observations and 10
+variables.</p>
+<p>In line with the preferences of viewers, this article places The
+Show’s <code>series</code> and <code>eposide</code> at the top of the
+dataset, followed by <code>Bakers&#39; Name</code> and their
+<code>technical</code>. The following are personal characteristics and
+background information about each baker, including
+<code>signature bake</code>, <code>show stopper bake</code>,
+<code>age</code>, <code>hometown</code>, and
+<code>occupation status</code>. ### 3.4</p>
 <pre class="r"><code>viewers_df = read.csv(&quot;./gbb_datasets/viewers.csv&quot;, 
                       na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
   janitor::clean_names() </code></pre>

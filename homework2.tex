@@ -1,0 +1,875 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={p8105\_hw2\_WL3011},
+  pdfauthor={Weiqi Liang},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{p8105\_hw2\_WL3011}
+\author{Weiqi Liang}
+\date{2024-10-02}
+
+\begin{document}
+\maketitle
+
+\subsection{Setup File}\label{setup-file}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(readxl)}
+\FunctionTok{library}\NormalTok{(haven)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{I. Problem 1}\label{i.-problem-1}
+
+\subsubsection{1.1 Load the NYC Subway
+Dataset}\label{load-the-nyc-subway-dataset}
+
+\begin{itemize}
+\tightlist
+\item
+  Retained columns: \texttt{Line}, \texttt{Station\ Name},
+  \texttt{Station\ Latitude}, \texttt{Station\ Longitude},
+  \texttt{Route1}:\texttt{Route11}, \texttt{Entry}, \texttt{Vending},
+  \texttt{Entrance\ Type}, \texttt{ADA};
+\item
+  Converted the \texttt{Entry} variable from ``YES'' and ``NO'' to
+  logical TRUE and FALSE.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the NYC Subway csv}
+\NormalTok{subway\_df }\OtherTok{=} 
+  \FunctionTok{read.csv}\NormalTok{(}\StringTok{"./NYC\_Transit\_Subway\_Entrance\_And\_Exit\_Data.csv"}\NormalTok{, }
+           \AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(line, station\_name, station\_latitude, station\_longitude,}
+\NormalTok{         route1}\SpecialCharTok{:}\NormalTok{route11, entry, vending, entrance\_type, ada) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{entry\_logical =} \FunctionTok{case\_match}\NormalTok{(}
+\NormalTok{      entry, }
+      \StringTok{"YES"} \SpecialCharTok{\textasciitilde{}} \ConstantTok{TRUE}\NormalTok{,}
+      \StringTok{"NO"}  \SpecialCharTok{\textasciitilde{}} \ConstantTok{FALSE}
+\NormalTok{      )}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+The dataset now is tidy, with each row representing a station entrance
+and all columns having consistent data types. It has 1868 rows and 20
+columns, showing New York City subway station entrances/exits. The
+columns include:
+
+\textbf{Station details}: Line, Station Name
+
+\textbf{Routes}: Route1 to Route11, showing the subway lines served at
+the station
+
+\textbf{Facilities}: Entrance Type, Entry, Vending, ADA (compliance),
+and ADA Notes
+
+\textbf{Geographical details}: Entrance Latitude/Longitude, North/South
+and East/West Streets
+
+\subsubsection{1.2 Answering the Following
+Question}\label{answering-the-following-question}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  How many distinct stations are there?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculate the number of distinct stations (identified by name and line)}
+\NormalTok{distinct\_stations }\OtherTok{=}\NormalTok{ subway\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{distinct}\NormalTok{(station\_name, line) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{nrow}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+There are 465 distinct stations, identified by their name and line.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  How many stations are ADA compliant?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# the number of ADA compliant stations}
+\NormalTok{ada\_compliant\_stations }\OtherTok{=}\NormalTok{ subway\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(ada }\SpecialCharTok{==} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{distinct}\NormalTok{(station\_name, line) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{nrow}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+There are 84 ADA compliant stations.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  What proportion of station entrances / exits without vending allow
+  entrance?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{no\_vending\_entry }\OtherTok{=}\NormalTok{ subway\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(vending }\SpecialCharTok{==} \StringTok{"NO"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(entry }\SpecialCharTok{==} \StringTok{"YES"}\NormalTok{ ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{nrow}\NormalTok{()}
+\NormalTok{proportion }\OtherTok{=}\NormalTok{ no\_vending\_entry}\SpecialCharTok{/}\FunctionTok{nrow}\NormalTok{(subway\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+The proportion of station entrances without vending allow entrance is
+0.0369379.
+
+\subsubsection{1.3 Reformat Dataset}\label{reformat-dataset}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Reformat data so that route number and route name are distinct
+  variables.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Split route to long format (pivot\_longer)}
+\NormalTok{Reformat\_subway\_df }\OtherTok{=}\NormalTok{ subway\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate\_at}\NormalTok{(}\FunctionTok{vars}\NormalTok{(route1}\SpecialCharTok{:}\NormalTok{route11), as.character) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{pivot\_longer}\NormalTok{(}
+    \AttributeTok{cols =}\NormalTok{ route1}\SpecialCharTok{:}\NormalTok{route11, }
+    \AttributeTok{names\_to =} \StringTok{"route\_number"}\NormalTok{, }
+    \AttributeTok{values\_to =} \StringTok{"route\_name"}
+\NormalTok{    ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(route\_name))  }\CommentTok{\# remove NA}
+
+\FunctionTok{head}\NormalTok{(Reformat\_subway\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 11
+##   line     station_name station_latitude station_longitude entry vending
+##   <chr>    <chr>                   <dbl>             <dbl> <chr> <chr>  
+## 1 4 Avenue 25th St                  40.7             -74.0 YES   YES    
+## 2 4 Avenue 25th St                  40.7             -74.0 YES   YES    
+## 3 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## 4 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## 5 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## 6 4 Avenue 36th St                  40.7             -74.0 YES   YES    
+## # i 5 more variables: entrance_type <chr>, ada <lgl>, entry_logical <lgl>,
+## #   route_number <chr>, route_name <chr>
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  How many distinct stations serve the A train?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# number of stations which serve A train}
+\NormalTok{a\_train\_stations }\OtherTok{=}\NormalTok{ Reformat\_subway\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(route\_name }\SpecialCharTok{==} \StringTok{"A"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{distinct}\NormalTok{(station\_name, line) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{nrow}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+There are 60 stations serve the A train.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Of the stations that serve the A train, how many are ADA compliant?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# number of ADA compliant stations which serve A train}
+\NormalTok{a\_train\_stations\_ADA }\OtherTok{=}\NormalTok{ Reformat\_subway\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(route\_name }\SpecialCharTok{==} \StringTok{"A"}\NormalTok{, ada }\SpecialCharTok{==} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{distinct}\NormalTok{(station\_name, line) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{nrow}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+There are 17 ADA compliant stations serve the A train.
+
+\subsection{II. Problem 2}\label{ii.-problem-2}
+
+\subsubsection{2.1 Load the Mr.~Trash Wheel
+Sheet}\label{load-the-mr.-trash-wheel-sheet}
+
+\begin{itemize}
+\tightlist
+\item
+  Import the \textbf{Mr.~Trash Wheel} sheet, while omitting non-data
+  entries;
+\item
+  Omit rows that do not include dumpster-specific data;
+\item
+  Round the number of \texttt{sports\_balls}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the Trash Wheel xlsx}
+\NormalTok{trash\_wheel\_path }\OtherTok{=} \StringTok{"./202409 Trash Wheel Collection Data.xlsx"}
+\NormalTok{MTW }\OtherTok{=} 
+\NormalTok{  readxl}\SpecialCharTok{::}\FunctionTok{read\_excel}\NormalTok{(trash\_wheel\_path, }\AttributeTok{sheet =} \StringTok{"Mr. Trash Wheel"}\NormalTok{, }
+                     \AttributeTok{skip =} \DecValTok{1}\NormalTok{, }\AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(dumpster}\SpecialCharTok{:}\NormalTok{homes\_powered) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{drop\_na}\NormalTok{(dumpster) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{sports\_balls\_integer =} \FunctionTok{as.integer}\NormalTok{(}\FunctionTok{round}\NormalTok{(sports\_balls))}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+Similarly, import the \textbf{Professor Trash Wheel} and \textbf{Gwynnda
+Trash Wheel} sheets.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the PTW and GTW sheet}
+\NormalTok{PTW }\OtherTok{=} 
+\NormalTok{  readxl}\SpecialCharTok{::}\FunctionTok{read\_excel}\NormalTok{(trash\_wheel\_path, }\AttributeTok{sheet =} \StringTok{"Professor Trash Wheel"}\NormalTok{, }
+                     \AttributeTok{skip =} \DecValTok{1}\NormalTok{, }\AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(dumpster}\SpecialCharTok{:}\NormalTok{homes\_powered) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{drop\_na}\NormalTok{(dumpster, month) }
+
+\NormalTok{GTW }\OtherTok{=} 
+\NormalTok{  readxl}\SpecialCharTok{::}\FunctionTok{read\_excel}\NormalTok{(trash\_wheel\_path, }\AttributeTok{sheet =} \StringTok{"Gwynnda Trash Wheel"}\NormalTok{, }
+                     \AttributeTok{skip =} \DecValTok{1}\NormalTok{, }\AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(dumpster}\SpecialCharTok{:}\NormalTok{homes\_powered) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{drop\_na}\NormalTok{(dumpster, month) }
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{2.2 Combine PTW and GTW with
+MTW}\label{combine-ptw-and-gtw-with-mtw}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MTW }\OtherTok{=}\NormalTok{ MTW }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{category =} \StringTok{"Mr.\_Trash\_Wheel"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{year =} \FunctionTok{as.character}\NormalTok{(year))}
+\NormalTok{PTW }\OtherTok{=}\NormalTok{ PTW }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{category =} \StringTok{"Professor\_Trash\_Wheel"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{year =} \FunctionTok{as.character}\NormalTok{(year))}
+\NormalTok{GTW }\OtherTok{=}\NormalTok{ GTW }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{category =} \StringTok{"Gwynnda\_Trash\_Wheel"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{year =} \FunctionTok{as.character}\NormalTok{(year))}
+
+\NormalTok{trash\_wheel\_df }\OtherTok{=} 
+  \FunctionTok{bind\_rows}\NormalTok{(MTW, PTW, GTW) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{relocate}\NormalTok{(category) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  The number of observations in the resulting datasets is as follows,
+  where \texttt{trash\_wheel\_df} represents the final merged dataset:
+\end{itemize}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1875}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2396}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2188}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1875}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Mr.~Trash Wheel
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Professor Trash Wheel
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Gwynnda Trash Wheel
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+trash\_wheel\_df
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{observation} & 651 & 118 & 263 & 1032 \\
+\textbf{variable} & 16 & 14 & 13 & 16 \\
+\end{longtable}
+
+Compared to \textbf{Mr.~Trash Wheel}, \textbf{Professor Trash Wheel} and
+\textbf{Gwynnda Trash Wheel} are missing \texttt{sports\_balls} and
+\texttt{glass\_bottles} \& \texttt{sports\_balls}, respectively. These
+missing values result in a large number of ``NA'' in the
+\textbf{trash\_wheel\_df}. But they are still valid data that represents
+their own category, so \textbf{trash\_wheel\_df} is tidy. In addition,
+only \texttt{sports\_balls} and \texttt{homes\_powered} trash exist as
+multiple decimal places, while the values of other garbage types are
+integers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Total weight of trash collected by Professor Trash Wheel}
+\NormalTok{PTW\_weight }\OtherTok{=}\NormalTok{ PTW }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_weight =} \FunctionTok{sum}\NormalTok{(weight\_tons, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+
+\CommentTok{\# Total number of cigarette butts collected by Gwynnda in June 2022}
+\NormalTok{GTW\_cigarette }\OtherTok{=}\NormalTok{ GTW }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(}\FunctionTok{month}\NormalTok{(date) }\SpecialCharTok{==} \DecValTok{6}\NormalTok{, }
+         \FunctionTok{year}\NormalTok{(date) }\SpecialCharTok{==} \DecValTok{2022}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_cigarette\_butts =} \FunctionTok{sum}\NormalTok{(cigarette\_butts, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\item
+  The total weight of trash collected by Professor Trash Wheel is
+  246.74.
+\item
+  The total number of cigarette butts collected by Gwynnda in June of
+  2022 is 18120.
+\end{itemize}
+
+\subsection{III. Problem 3}\label{iii.-problem-3}
+
+\subsubsection{3.1 Load all 4 csv}\label{load-all-4-csv}
+
+\textbf{bakers\_df:}
+
+\begin{itemize}
+\item
+  Load bakers.csv;
+\item
+  Split the player's first name from \texttt{bakers\_name} as
+  \texttt{baker} so that it can be used as a key for later dataset
+  merging;
+\item
+  Ensure there are no duplicate bakers;
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bakers\_df }\OtherTok{=} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"./gbb\_datasets/bakers.csv"}\NormalTok{, }
+                     \AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{sub}\NormalTok{(}\StringTok{" .*"}\NormalTok{, }\StringTok{" "}\NormalTok{, baker\_name)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{iconv}\NormalTok{(baker, }\AttributeTok{from =} \StringTok{"latin1"}\NormalTok{, }\AttributeTok{to =} \StringTok{"UTF{-}8"}\NormalTok{, }\AttributeTok{sub =} \StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{trimws}\NormalTok{(baker)) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# remove " "}
+  \FunctionTok{distinct}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{arrange}\NormalTok{(baker) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{relocate}\NormalTok{(baker)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{bakes\_df:}
+
+\begin{itemize}
+\item
+  Load bakes.csv;
+\item
+  Ensure there are no duplicate bakers;
+\item
+  Noticed that the name format of the player \texttt{"Jo"} is
+  inconsistent with that of other players, since the double quotation
+  marks are added. Modify it with \texttt{casematch}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bakes\_df }\OtherTok{=} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"./gbb\_datasets/bakes.csv"}\NormalTok{, }
+                     \AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{distinct}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{case\_match}\NormalTok{(}
+\NormalTok{    baker,}
+    \StringTok{\textquotesingle{}"Jo"\textquotesingle{}} \SpecialCharTok{\textasciitilde{}} \StringTok{"Jo"}\NormalTok{,}
+    \AttributeTok{.default =}\NormalTok{ baker)}
+\NormalTok{    ) }\SpecialCharTok{|\textgreater{}} \CommentTok{\#keep other values unchanged}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{iconv}\NormalTok{(baker, }\AttributeTok{from =} \StringTok{"latin1"}\NormalTok{, }\AttributeTok{to =} \StringTok{"UTF{-}8"}\NormalTok{, }\AttributeTok{sub =} \StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{trimws}\NormalTok{(baker)) }\SpecialCharTok{|\textgreater{}}  \CommentTok{\# remove " "}
+  \FunctionTok{arrange}\NormalTok{(baker) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{relocate}\NormalTok{(baker)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{results\_df:}
+
+\begin{itemize}
+\tightlist
+\item
+  Load results.csv;
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results\_df }\OtherTok{=} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"./gbb\_datasets/results.csv"}\NormalTok{, }\AttributeTok{skip =} \DecValTok{2}\NormalTok{,}
+                      \AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{iconv}\NormalTok{(baker, }\AttributeTok{from =} \StringTok{"latin1"}\NormalTok{, }\AttributeTok{to =} \StringTok{"UTF{-}8"}\NormalTok{, }\AttributeTok{sub =} \StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{baker =} \FunctionTok{trimws}\NormalTok{(baker)) }\SpecialCharTok{|\textgreater{}}  \CommentTok{\# remove " "}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{3.2 Check the Completeness}\label{check-the-completeness}
+
+\begin{itemize}
+\tightlist
+\item
+  Identify if any baker in \texttt{results\_df} is missing from the
+  \texttt{bakers\_df}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#anti\_join(x, y, by = "key")  x have while y donot have}
+\NormalTok{missing\_bakers }\OtherTok{=} \FunctionTok{anti\_join}\NormalTok{(results\_df, bakers\_df, }\AttributeTok{by =} \StringTok{"baker"}\NormalTok{) }
+
+\NormalTok{missing\_bakers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   series episode  baker technical     result
+## 1      2       1 Joanne        11         IN
+## 2      2       2 Joanne        10         IN
+## 3      2       3 Joanne         1         IN
+## 4      2       4 Joanne         8         IN
+## 5      2       5 Joanne         6         IN
+## 6      2       6 Joanne         1 STAR BAKER
+## 7      2       7 Joanne         3         IN
+## 8      2       8 Joanne         1     WINNER
+\end{verbatim}
+
+The results show that Joanne's series 2 episodes 1-6 is present in the
+\texttt{results\_df}, but not in the \texttt{bakers\_df}.
+
+\begin{itemize}
+\tightlist
+\item
+  Identify if any baker's bake in \texttt{results\_df} is missing from
+  the \texttt{bakes\_df}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{missing\_bakes }\OtherTok{=} \FunctionTok{anti\_join}\NormalTok{(results\_df, bakes\_df, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"baker"}\NormalTok{, }\StringTok{"episode"}\NormalTok{)) }
+\FunctionTok{summary}\NormalTok{(missing\_bakes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      series          episode          baker             technical     
+##  Min.   : 1.000   Min.   : 1.000   Length:554         Min.   : 1.000  
+##  1st Qu.: 4.000   1st Qu.: 4.000   Class :character   1st Qu.: 3.000  
+##  Median : 7.000   Median : 7.000   Mode  :character   Median : 5.000  
+##  Mean   : 6.699   Mean   : 6.377                      Mean   : 5.075  
+##  3rd Qu.: 9.000   3rd Qu.: 9.000                      3rd Qu.: 7.000  
+##  Max.   :10.000   Max.   :10.000                      Max.   :13.000  
+##                                                       NA's   :408     
+##     result         
+##  Length:554        
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+##                    
+## 
+\end{verbatim}
+
+The results shows that 84 bakers' bakes are missing from the
+\texttt{bakes\_df}.
+
+\subsubsection{3.3 Merge Datasets}\label{merge-datasets}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Merge all 3 datasets}
+\NormalTok{combined\_df }\OtherTok{=} 
+\NormalTok{  results\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{left\_join}\NormalTok{(bakers\_df, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"baker"}\NormalTok{, }\StringTok{"series"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{left\_join}\NormalTok{(bakes\_df, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"baker"}\NormalTok{, }\StringTok{"series"}\NormalTok{, }\StringTok{"episode"}\NormalTok{))}
+
+\CommentTok{\# Reorganize the variables to be meaningful}
+\NormalTok{final\_df }\OtherTok{=}
+\NormalTok{  combined\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(series, episode, baker\_name, technical, result, signature\_bake, show\_stopper, }
+\NormalTok{         baker\_age, hometown, baker\_occupation) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{arrange}\NormalTok{(series, episode,technical)}
+
+\CommentTok{\# export the final\_df as csv}
+\FunctionTok{write\_csv}\NormalTok{(final\_df, }\StringTok{"./gbb\_datasets/Great British Bake Off.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The final dataset \texttt{final\_df} has 1136 observations and 10
+variables.
+
+In line with the preferences of viewers, this article places The Show's
+\texttt{series} and \texttt{eposide} at the top of the dataset, followed
+by \texttt{Bakers\textquotesingle{}\ Name} and their \texttt{technical}.
+The following are personal characteristics and background information
+about each baker, including \texttt{signature\ bake},
+\texttt{show\ stopper\ bake}, \texttt{age}, \texttt{hometown}, and
+\texttt{occupation\ status}.
+
+\subsubsection{3.4 Star Bakers}\label{star-bakers}
+
+Filter results for Seasons 5 to 10 and select Star Baker.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{star\_baker\_df }\OtherTok{=}\NormalTok{ results\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(series }\SpecialCharTok{\textgreater{}=} \DecValTok{5} \SpecialCharTok{\&}\NormalTok{ series }\SpecialCharTok{\textless{}=} \DecValTok{10}\NormalTok{, result }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"STAR BAKER"}\NormalTok{, }\StringTok{"WINNER"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(series, episode, baker, result) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{result =} \FunctionTok{case\_match}\NormalTok{(}
+\NormalTok{    result,}
+    \StringTok{"WINNER"} \SpecialCharTok{\textasciitilde{}} \StringTok{"STAR BAKER"}\NormalTok{,}
+    \AttributeTok{.default =}\NormalTok{ result)}
+\NormalTok{  ) }
+\end{Highlighting}
+\end{Shaded}
+
+Create a table to show star bakers in Season 5 to 10, organizing by
+series and episode.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(knitr)}
+\FunctionTok{library}\NormalTok{(kableExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     group_rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{star\_baker\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{arrange}\NormalTok{(series, episode) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{kable}\NormalTok{(}\AttributeTok{caption =} \StringTok{"Star Baker and Winners for Seasons 5 to 10"}\NormalTok{,}
+        \AttributeTok{booktabs =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{kable\_styling}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{row\_spec}\NormalTok{(}\FunctionTok{which}\NormalTok{(star\_baker\_df}\SpecialCharTok{$}\NormalTok{series }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{9}\NormalTok{)), }\AttributeTok{background =} \StringTok{"lightgray"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[t]{rrll}
+\caption{\label{tab:unnamed-chunk-19}Star Baker and Winners for Seasons 5 to 10}\\
+\toprule
+series & episode & baker & result\\
+\midrule
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{1} & \cellcolor{lightgray}{Nancy} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{2} & \cellcolor{lightgray}{Richard} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{3} & \cellcolor{lightgray}{Luis} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{4} & \cellcolor{lightgray}{Richard} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{5} & \cellcolor{lightgray}{Kate} & \cellcolor{lightgray}{STAR BAKER}\\
+\addlinespace
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{6} & \cellcolor{lightgray}{Chetna} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{7} & \cellcolor{lightgray}{Richard} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{8} & \cellcolor{lightgray}{Richard} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{9} & \cellcolor{lightgray}{Richard} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{5} & \cellcolor{lightgray}{10} & \cellcolor{lightgray}{Nancy} & \cellcolor{lightgray}{STAR BAKER}\\
+\addlinespace
+6 & 1 & Marie & STAR BAKER\\
+6 & 2 & Ian & STAR BAKER\\
+6 & 3 & Ian & STAR BAKER\\
+6 & 4 & Ian & STAR BAKER\\
+6 & 5 & Nadiya & STAR BAKER\\
+\addlinespace
+6 & 6 & Mat & STAR BAKER\\
+6 & 7 & Tamal & STAR BAKER\\
+6 & 8 & Nadiya & STAR BAKER\\
+6 & 9 & Nadiya & STAR BAKER\\
+6 & 10 & Nadiya & STAR BAKER\\
+\addlinespace
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{1} & \cellcolor{lightgray}{Jane} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{2} & \cellcolor{lightgray}{Candice} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{3} & \cellcolor{lightgray}{Tom} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{4} & \cellcolor{lightgray}{Benjamina} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{5} & \cellcolor{lightgray}{Candice} & \cellcolor{lightgray}{STAR BAKER}\\
+\addlinespace
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{6} & \cellcolor{lightgray}{Tom} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{7} & \cellcolor{lightgray}{Andrew} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{8} & \cellcolor{lightgray}{Candice} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{9} & \cellcolor{lightgray}{Andrew} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{7} & \cellcolor{lightgray}{10} & \cellcolor{lightgray}{Candice} & \cellcolor{lightgray}{STAR BAKER}\\
+\addlinespace
+8 & 1 & Steven & STAR BAKER\\
+8 & 2 & Steven & STAR BAKER\\
+8 & 3 & Julia & STAR BAKER\\
+8 & 4 & Kate & STAR BAKER\\
+8 & 5 & Sophie & STAR BAKER\\
+\addlinespace
+8 & 6 & Liam & STAR BAKER\\
+8 & 7 & Steven & STAR BAKER\\
+8 & 8 & Stacey & STAR BAKER\\
+8 & 9 & Sophie & STAR BAKER\\
+8 & 10 & Sophie & STAR BAKER\\
+\addlinespace
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{1} & \cellcolor{lightgray}{Manon} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{2} & \cellcolor{lightgray}{Rahul} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{3} & \cellcolor{lightgray}{Rahul} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{4} & \cellcolor{lightgray}{Dan} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{5} & \cellcolor{lightgray}{Kim-Joy} & \cellcolor{lightgray}{STAR BAKER}\\
+\addlinespace
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{6} & \cellcolor{lightgray}{Briony} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{7} & \cellcolor{lightgray}{Kim-Joy} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{8} & \cellcolor{lightgray}{Ruby} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{9} & \cellcolor{lightgray}{Ruby} & \cellcolor{lightgray}{STAR BAKER}\\
+\cellcolor{lightgray}{9} & \cellcolor{lightgray}{10} & \cellcolor{lightgray}{Rahul} & \cellcolor{lightgray}{STAR BAKER}\\
+\addlinespace
+10 & 1 & Michelle & STAR BAKER\\
+10 & 2 & Alice & STAR BAKER\\
+10 & 3 & Michael & STAR BAKER\\
+10 & 4 & Steph & STAR BAKER\\
+10 & 5 & Steph & STAR BAKER\\
+\addlinespace
+10 & 6 & Steph & STAR BAKER\\
+10 & 7 & Henry & STAR BAKER\\
+10 & 8 & Steph & STAR BAKER\\
+10 & 9 & Alice & STAR BAKER\\
+10 & 10 & David & STAR BAKER\\
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{baker\_frequency }\OtherTok{=}\NormalTok{ star\_baker\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{count}\NormalTok{(baker, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{)  }\CommentTok{\# sort = TRUE means descending}
+\FunctionTok{head}\NormalTok{(baker\_frequency)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     baker n
+## 1 Richard 5
+## 2 Candice 4
+## 3  Nadiya 4
+## 4   Steph 4
+## 5     Ian 3
+## 6   Rahul 3
+\end{verbatim}
+
+\begin{itemize}
+\item
+  \textbf{Predictable Overall Winners:} \emph{Richard Burr} won STAR
+  BAKER 5 times, which is the most of all bakers. \emph{Candice Brown},
+  \emph{Nadiya Hussain} and \emph{Steph Blackwell} won 4 times.
+  Additionally, \emph{Richard Burr} from series 5, \emph{Ian Cumming}
+  and \emph{Nadiya Hussain} from series 6, \emph{Steph Blackwell} from
+  series 10 all consistently achieved STAR BAKER during their own
+  series. To summarize, \textbf{Richard Burr} is the most predictable
+  overall winners.
+\item
+  \textbf{Surprises:} It is surprising that \textbf{David Atherton} from
+  series 10 was crowned STAR BAKER in episode 10, even though he did not
+  won anyone before.
+\end{itemize}
+
+\subsubsection{3.5 viewers\_df}\label{viewers_df}
+
+Start by importing viewers.csv.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{viewers\_df }\OtherTok{=} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"./gbb\_datasets/viewers.csv"}\NormalTok{, }
+                      \AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{"NA"}\NormalTok{, }\StringTok{"."}\NormalTok{, }\StringTok{""}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  janitor}\SpecialCharTok{::}\FunctionTok{clean\_names}\NormalTok{() }
+
+\FunctionTok{head}\NormalTok{(viewers\_df, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    episode series_1 series_2 series_3 series_4 series_5 series_6 series_7
+## 1        1     2.24     3.10     3.85     6.60    8.510    11.62    13.58
+## 2        2     3.00     3.53     4.60     6.65    8.790    11.59    13.45
+## 3        3     3.00     3.82     4.53     7.17    9.280    12.01    13.01
+## 4        4     2.60     3.60     4.71     6.82   10.250    12.36    13.29
+## 5        5     3.03     3.83     4.61     6.95    9.950    12.39    13.12
+## 6        6     2.75     4.25     4.82     7.32   10.130    12.00    13.13
+## 7        7       NA     4.42     5.10     7.76   10.280    12.35    13.45
+## 8        8       NA     5.06     5.35     7.41    9.023    11.09    13.26
+## 9        9       NA       NA     5.70     7.41   10.670    12.65    13.44
+## 10      10       NA       NA     6.74     9.45   13.510    15.05    15.90
+##    series_8 series_9 series_10
+## 1      9.46     9.55      9.62
+## 2      9.23     9.31      9.38
+## 3      8.68     8.91      8.94
+## 4      8.55     8.88      8.96
+## 5      8.61     8.67      9.26
+## 6      8.61     8.91      8.70
+## 7      9.01     9.22      8.98
+## 8      8.95     9.69      9.19
+## 9      9.03     9.50      9.34
+## 10    10.04    10.34     10.05
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{average\_series\_1 }\OtherTok{=}\NormalTok{ viewers\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{average =} \FunctionTok{mean}\NormalTok{(series\_1, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+\NormalTok{average\_series\_5 }\OtherTok{=}\NormalTok{ viewers\_df }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{average =} \FunctionTok{mean}\NormalTok{(series\_5, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+The average viewership in Season 1 is 2.77. In Season 5 is 10.0393.
+
+\end{document}

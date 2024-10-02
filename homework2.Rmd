@@ -196,7 +196,82 @@ GTW_cigarette = GTW |>
 
 *   The total number of cigarette butts collected by Gwynnda in June of 2022 is `r GTW_cigarette`.
 
+## III. Problem 3
+
+### 3.1 Load all 4 csv
+
+**bakers_df:**
+*   Load bakers.csv;
+*   Split the player's first name from `bakers_name` as `baker` so that it can be used as a key for later dataset merging;
+*   Ensure there are no duplicate bakers;
+```{r}
+bakers_df = read.csv("./gbb_datasets/bakers.csv", 
+                     na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  mutate(baker = sub(" .*", " ", baker_name)) |>
+  mutate(baker = iconv(baker, from = "latin1", to = "UTF-8", sub = "")) |>
+  mutate(baker = trimws(baker))  # remove " "
+  distinct() |>
+  arrange(baker) |>
+  relocate(baker)
+```
+
+**bakes_df:**
+*   Load bakes.csv;
+*   Ensure there are no duplicate bakers;
+*   Noticed that the name format of the player `"Jo"` is inconsistent with that of other players, since the double quotation marks are added. Modify it with `casematch`.
+```{r}
+bakes_df = read.csv("./gbb_datasets/bakes.csv", 
+                     na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  distinct() |>
+  mutate(baker = case_match(
+    baker,
+    '"Jo"' ~ "Jo",
+    .default = baker)
+    ) |> #keep other values unchanged
+  mutate(baker = iconv(baker, from = "latin1", to = "UTF-8", sub = "")) |>
+  mutate(baker = trimws(baker)) |>  # remove " "
+  arrange(baker) |>
+  relocate(baker)
+```
 
 
+**results_df:**
+*   Load results.csv;
+*   Check for completeness of Star Baker and elimination outcomes for each episode.
+*   Ensure that every episode has one Star Baker and, where applicable, one eliminated contestant.
 
+```{r}
+results_df = read.csv("./gbb_datasets/results.csv", skip = 2,
+                      na = c("NA", ".", "")) |>
+  mutate(baker = iconv(baker, from = "latin1", to = "UTF-8", sub = "")) |>
+  mutate(baker = trimws(baker)) |>  # remove " "
+  janitor::clean_names() 
+```
+
+
+### 3.2 Check the Completeness
+```{r}
+# Identify if any bakers in results are missing from the bakers dataset
+
+#anti_join(x, y, by = "key")  x have while y donot have
+missing_bakers = anti_join(results_df, bakers_df, by = "baker") 
+
+head(missing_bakers)
+```
+
+
+### 3.3 Merge Datasets
+```{r}
+# Merge datasets
+
+```
+
+### 3.4
+```{r}
+viewers_df = read.csv("./gbb_datasets/viewers.csv", 
+                      na = c("NA", ".", "")) |>
+  janitor::clean_names() 
+```
 

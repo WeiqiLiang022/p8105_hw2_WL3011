@@ -10,6 +10,7 @@ output: html_document
 library(tidyverse)
 library(dplyr)
 library(readxl)
+library(haven)
 ```
 
 ## I. Problem 1
@@ -116,10 +117,10 @@ There are `r a_train_stations_ADA` ADA compliant stations serve the A train.
 *   Omit rows that do not include dumpster-specific data;
 *   Round the number of `sports_balls`.
 
-```{r}
+```{r message=FALSE}
 # Load the Trash Wheel xlsx
 trash_wheel_path = "./202409 Trash Wheel Collection Data.xlsx"
-trash_wheel = 
+MTW = 
   readxl::read_excel(trash_wheel_path, sheet = "Mr. Trash Wheel", 
                      skip = 1, na = c("NA", ".", "")) |>
   janitor::clean_names() |>
@@ -129,4 +130,73 @@ trash_wheel =
     sports_balls_integer = as.integer(round(sports_balls))
     )
 ```
+
+Similarly, import the **Professor Trash Wheel** and **Gwynnda Trash Wheel** sheets.
+```{r}
+# Load the PTW and GTW sheet
+PTW = 
+  readxl::read_excel(trash_wheel_path, sheet = "Professor Trash Wheel", 
+                     skip = 1, na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  select(dumpster:homes_powered) |>
+  drop_na(dumpster, month) 
+
+GTW = 
+  readxl::read_excel(trash_wheel_path, sheet = "Gwynnda Trash Wheel", 
+                     skip = 1, na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  select(dumpster:homes_powered) |>
+  drop_na(dumpster, month) 
+
+```
+
+### 2.2 Combine PTW and GTW with MTW 
+```{r}
+MTW = MTW |>
+  mutate(category = "Mr._Trash_Wheel") |>
+  mutate(year = as.character(year))
+PTW = PTW |>
+  mutate(category = "Professor_Trash_Wheel") |>
+  mutate(year = as.character(year))
+GTW = GTW |>
+  mutate(category = "Gwynnda_Trash_Wheel") |>
+  mutate(year = as.character(year))
+
+trash_wheel_df = 
+  bind_rows(MTW, PTW, GTW) |>
+  relocate(category) 
+```
+
+*   The number of observations in the resulting datasets is as follows, where `trash_wheel_df` represents the final merged dataset:
+
+|                | Mr. Trash Wheel  | Professor Trash Wheel | Gwynnda Trash Wheel | trash_wheel_df   |
+|:--------------:|:----------------:|:---------------------:|:-------------------:|:----------------:|
+| **observation**        | `r nrow(MTW)`     | `r nrow(PTW)`         | `r nrow(GTW)`       | `r nrow(trash_wheel_df)` |
+| **variable**     | `r ncol(MTW)`     | `r ncol(PTW)`         | `r ncol(GTW)`       | `r ncol(trash_wheel_df)` |
+
+Compared to **Mr. Trash Wheel**, **Professor Trash Wheel** and **Gwynnda Trash Wheel** are missing `sports_balls` and `glass_bottles` & `sports_balls`, respectively. These missing values result in a large number of "NA" in the **trash_wheel_df**. But they are still valid data that represents their own category, so **trash_wheel_df** is tidy. In addition, only `sports_balls` and `homes_powered` trash exist as multiple decimal places, while the values of other garbage types are integers.
+
+
+
+
+
+```{r }
+# Total weight of trash collected by Professor Trash Wheel
+PTW_weight = PTW |>
+  summarise(total_weight = sum(weight_tons, na.rm = TRUE))
+
+# Total number of cigarette butts collected by Gwynnda in June 2022
+GTW_cigarette = GTW |>
+  filter(month(date) == 6, 
+         year(date) == 2022) |>
+  summarise(total_cigarette_butts = sum(cigarette_butts, na.rm = TRUE))
+```
+
+*   The total weight of trash collected by Professor Trash Wheel is `r PTW_weight`.
+
+*   The total number of cigarette butts collected by Gwynnda in June of 2022 is `r GTW_cigarette`.
+
+
+
+
 

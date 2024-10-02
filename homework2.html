@@ -361,7 +361,8 @@ display: none;
 <h2>Setup File</h2>
 <pre class="r"><code>library(tidyverse)
 library(dplyr)
-library(readxl)</code></pre>
+library(readxl)
+library(haven)</code></pre>
 </div>
 <div id="i.-problem-1" class="section level2">
 <h2>I. Problem 1</h2>
@@ -492,9 +493,9 @@ non-data entries;</li>
 <li>Round the number of <code>sports_balls</code>.</li>
 </ul>
 <pre class="r"><code># Load the Trash Wheel xlsx
-trash_wheel_path = &quot;./202309 Trash Wheel Collection Data.xlsx&quot;
-trash_wheel = 
-  readxl::read_excel(&quot;./202309 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, 
+trash_wheel_path = &quot;./202409 Trash Wheel Collection Data.xlsx&quot;
+MTW = 
+  readxl::read_excel(trash_wheel_path, sheet = &quot;Mr. Trash Wheel&quot;, 
                      skip = 1, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
   janitor::clean_names() |&gt;
   select(dumpster:homes_powered) |&gt;
@@ -502,9 +503,102 @@ trash_wheel =
   mutate(
     sports_balls_integer = as.integer(round(sports_balls))
     )</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...15`
-## • `` -&gt; `...16`</code></pre>
+<p>Similarly, import the <strong>Professor Trash Wheel</strong> and
+<strong>Gwynnda Trash Wheel</strong> sheets.</p>
+<pre class="r"><code># Load the PTW and GTW sheet
+PTW = 
+  readxl::read_excel(trash_wheel_path, sheet = &quot;Professor Trash Wheel&quot;, 
+                     skip = 1, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
+  janitor::clean_names() |&gt;
+  select(dumpster:homes_powered) |&gt;
+  drop_na(dumpster, month) 
+
+GTW = 
+  readxl::read_excel(trash_wheel_path, sheet = &quot;Gwynnda Trash Wheel&quot;, 
+                     skip = 1, na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
+  janitor::clean_names() |&gt;
+  select(dumpster:homes_powered) |&gt;
+  drop_na(dumpster, month) </code></pre>
+</div>
+<div id="combine-ptw-and-gtw-with-mtw" class="section level3">
+<h3>2.2 Combine PTW and GTW with MTW</h3>
+<pre class="r"><code>MTW = MTW |&gt;
+  mutate(category = &quot;Mr._Trash_Wheel&quot;) |&gt;
+  mutate(year = as.character(year))
+PTW = PTW |&gt;
+  mutate(category = &quot;Professor_Trash_Wheel&quot;) |&gt;
+  mutate(year = as.character(year))
+GTW = GTW |&gt;
+  mutate(category = &quot;Gwynnda_Trash_Wheel&quot;) |&gt;
+  mutate(year = as.character(year))
+
+trash_wheel_df = 
+  bind_rows(MTW, PTW, GTW) |&gt;
+  relocate(category) </code></pre>
+<ul>
+<li>The number of observations in the resulting datasets is as follows,
+where <code>trash_wheel_df</code> represents the final merged
+dataset:</li>
+</ul>
+<table>
+<colgroup>
+<col width="16%" />
+<col width="18%" />
+<col width="23%" />
+<col width="21%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center">Mr. Trash Wheel</th>
+<th align="center">Professor Trash Wheel</th>
+<th align="center">Gwynnda Trash Wheel</th>
+<th align="center">trash_wheel_df</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>observation</strong></td>
+<td align="center">651</td>
+<td align="center">118</td>
+<td align="center">263</td>
+<td align="center">1032</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>variable</strong></td>
+<td align="center">16</td>
+<td align="center">14</td>
+<td align="center">13</td>
+<td align="center">16</td>
+</tr>
+</tbody>
+</table>
+<p>Compared to <strong>Mr. Trash Wheel</strong>, <strong>Professor Trash
+Wheel</strong> and <strong>Gwynnda Trash Wheel</strong> are missing
+<code>sports_balls</code> and <code>glass_bottles</code> &amp;
+<code>sports_balls</code>, respectively. These missing values result in
+a large number of “NA” in the <strong>trash_wheel_df</strong>. But they
+are still valid data that represents their own category, so
+<strong>trash_wheel_df</strong> is tidy. In addition, only
+<code>sports_balls</code> and <code>homes_powered</code> trash exist as
+multiple decimal places, while the values of other garbage types are
+integers.</p>
+<pre class="r"><code># Total weight of trash collected by Professor Trash Wheel
+PTW_weight = PTW |&gt;
+  summarise(total_weight = sum(weight_tons, na.rm = TRUE))
+
+# Total number of cigarette butts collected by Gwynnda in June 2022
+GTW_cigarette = GTW |&gt;
+  filter(month(date) == 6, 
+         year(date) == 2022) |&gt;
+  summarise(total_cigarette_butts = sum(cigarette_butts, na.rm = TRUE))</code></pre>
+<ul>
+<li><p>The total weight of trash collected by Professor Trash Wheel is
+246.74.</p></li>
+<li><p>The total number of cigarette butts collected by Gwynnda in June
+of 2022 is 1.812^{4}.</p></li>
+</ul>
 </div>
 </div>
 

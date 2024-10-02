@@ -1300,12 +1300,12 @@ head(baker_frequency)
   Burr* from series 5, *Ian Cumming* and *Nadiya Hussain* from series 6,
   *Steph Blackwell* from series 10 all consistently achieved STAR BAKER
   during their own series. However, only *Nadiya Hussain* became the
-  final WINNER in series 6 episode 10. To summarize, **Nadiya Hussain**
+  final WINNER at series 6 episode 10. To summarize, **Nadiya Hussain**
   is the most predictable overall winners.
 
 - **Surprises:** It is surprising that **David Atherton** from series 10
-  was crowned STAR BAKER in episode 10, even though he did not won
-  anyone before.
+  was crowned WINNER in episode 10, even though he did not won anyone
+  before.
 
 ### 3.5 viewers_df
 

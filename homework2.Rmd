@@ -201,25 +201,31 @@ GTW_cigarette = GTW |>
 ### 3.1 Load all 4 csv
 
 **bakers_df:**
-*   Load bakers.csv;
-*   Split the player's first name from `bakers_name` as `baker` so that it can be used as a key for later dataset merging;
-*   Ensure there are no duplicate bakers;
+
+*    Load bakers.csv;
+
+*    Split the player's first name from `bakers_name` as `baker` so that it can be used as a key for later dataset merging;
+
+*    Ensure there are no duplicate bakers;
 ```{r}
 bakers_df = read.csv("./gbb_datasets/bakers.csv", 
                      na = c("NA", ".", "")) |>
   janitor::clean_names() |>
   mutate(baker = sub(" .*", " ", baker_name)) |>
   mutate(baker = iconv(baker, from = "latin1", to = "UTF-8", sub = "")) |>
-  mutate(baker = trimws(baker))  # remove " "
+  mutate(baker = trimws(baker)) |> # remove " "
   distinct() |>
   arrange(baker) |>
   relocate(baker)
 ```
 
 **bakes_df:**
-*   Load bakes.csv;
-*   Ensure there are no duplicate bakers;
-*   Noticed that the name format of the player `"Jo"` is inconsistent with that of other players, since the double quotation marks are added. Modify it with `casematch`.
+
+*    Load bakes.csv;
+
+*    Ensure there are no duplicate bakers;
+
+*    Noticed that the name format of the player `"Jo"` is inconsistent with that of other players, since the double quotation marks are added. Modify it with `casematch`.
 ```{r}
 bakes_df = read.csv("./gbb_datasets/bakes.csv", 
                      na = c("NA", ".", "")) |>
@@ -238,9 +244,8 @@ bakes_df = read.csv("./gbb_datasets/bakes.csv",
 
 
 **results_df:**
-*   Load results.csv;
-*   Check for completeness of Star Baker and elimination outcomes for each episode.
-*   Ensure that every episode has one Star Baker and, where applicable, one eliminated contestant.
+
+*    Load results.csv;
 
 ```{r}
 results_df = read.csv("./gbb_datasets/results.csv", skip = 2,
@@ -252,20 +257,35 @@ results_df = read.csv("./gbb_datasets/results.csv", skip = 2,
 
 
 ### 3.2 Check the Completeness
+*    Identify if any baker in `results_df` is missing from the `bakers_df`.
 ```{r}
-# Identify if any bakers in results are missing from the bakers dataset
-
 #anti_join(x, y, by = "key")  x have while y donot have
 missing_bakers = anti_join(results_df, bakers_df, by = "baker") 
 
 head(missing_bakers)
 ```
+The results show that Joanne's series 2 episodes 1-6 is present in the `results_df`, but not in the `bakers_df`.
 
+*   Identify if any baker in `results_df` is missing from the `bakes_df`.
+```{r}
+missing_bakes = anti_join(results_df, bakes_df, by = c("baker", "episode")) 
+head(missing_bakers)
+```
+The results confirm that Joanne is not recorded in `bakes_df` as well.
 
 ### 3.3 Merge Datasets
 ```{r}
-# Merge datasets
+# Merge all 3 datasets
+combined_df = 
+  results_df |>
+  left_join(bakers_df, by = c("baker", "series")) |>
+  left_join(bakes_df, by = c("baker", "series", "episode"))
 
+# Reorganize the variables to be meaningful
+final_df =
+  combined_df |>
+  select(series, episode, baker_name, technical, result, signature_bake, show_stopper, baker_age, hometown, baker_occupation) |>
+  arrange(series, episode,technical)
 ```
 
 ### 3.4

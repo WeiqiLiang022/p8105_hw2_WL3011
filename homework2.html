@@ -11,7 +11,7 @@
 
 <meta name="author" content="Weiqi Liang" />
 
-<meta name="date" content="2024-10-01" />
+<meta name="date" content="2024-10-02" />
 
 <title>p8105_hw2_WL3011</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">p8105_hw2_WL3011</h1>
 <h4 class="author">Weiqi Liang</h4>
-<h4 class="date">2024-10-01</h4>
+<h4 class="date">2024-10-02</h4>
 
 </div>
 
@@ -605,28 +605,31 @@ of 2022 is 1.812^{4}.</p></li>
 <h2>III. Problem 3</h2>
 <div id="load-all-4-csv" class="section level3">
 <h3>3.1 Load all 4 csv</h3>
+<p><strong>bakers_df:</strong></p>
+<ul>
+<li><p>Load bakers.csv;</p></li>
+<li><p>Split the player’s first name from <code>bakers_name</code> as
+<code>baker</code> so that it can be used as a key for later dataset
+merging;</p></li>
+<li><p>Ensure there are no duplicate bakers;</p></li>
+</ul>
 <pre class="r"><code>bakers_df = read.csv(&quot;./gbb_datasets/bakers.csv&quot;, 
                      na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
   janitor::clean_names() |&gt;
   mutate(baker = sub(&quot; .*&quot;, &quot; &quot;, baker_name)) |&gt;
+  mutate(baker = iconv(baker, from = &quot;latin1&quot;, to = &quot;UTF-8&quot;, sub = &quot;&quot;)) |&gt;
+  mutate(baker = trimws(baker)) |&gt; # remove &quot; &quot;
   distinct() |&gt;
   arrange(baker) |&gt;
-  relocate(baker)
-summary(bakers_df)</code></pre>
-<pre><code>##     baker            baker_name            series       baker_age    
-##  Length:120         Length:120         Min.   : 1.0   Min.   :17.00  
-##  Class :character   Class :character   1st Qu.: 3.0   1st Qu.:28.75  
-##  Mode  :character   Mode  :character   Median : 6.0   Median :34.00  
-##                                        Mean   : 5.6   Mean   :37.39  
-##                                        3rd Qu.: 8.0   3rd Qu.:45.00  
-##                                        Max.   :10.0   Max.   :71.00  
-##  baker_occupation     hometown        
-##  Length:120         Length:120        
-##  Class :character   Class :character  
-##  Mode  :character   Mode  :character  
-##                                       
-##                                       
-## </code></pre>
+  relocate(baker)</code></pre>
+<p><strong>bakes_df:</strong></p>
+<ul>
+<li><p>Load bakes.csv;</p></li>
+<li><p>Ensure there are no duplicate bakers;</p></li>
+<li><p>Noticed that the name format of the player <code>&quot;Jo&quot;</code> is
+inconsistent with that of other players, since the double quotation
+marks are added. Modify it with <code>casematch</code>.</p></li>
+</ul>
 <pre class="r"><code>bakes_df = read.csv(&quot;./gbb_datasets/bakes.csv&quot;, 
                      na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
   janitor::clean_names() |&gt;
@@ -634,68 +637,66 @@ summary(bakers_df)</code></pre>
   mutate(baker = case_match(
     baker,
     &#39;&quot;Jo&quot;&#39; ~ &quot;Jo&quot;,
-    .default = baker)) |&gt; #keep other values unchanged
+    .default = baker)
+    ) |&gt; #keep other values unchanged
+  mutate(baker = iconv(baker, from = &quot;latin1&quot;, to = &quot;UTF-8&quot;, sub = &quot;&quot;)) |&gt;
+  mutate(baker = trimws(baker)) |&gt;  # remove &quot; &quot;
   arrange(baker) |&gt;
-  relocate(baker)
-summary(bakes_df)</code></pre>
-<pre><code>##     baker               series        episode       signature_bake    
-##  Length:548         Min.   :1.00   Min.   : 1.000   Length:548        
-##  Class :character   1st Qu.:3.00   1st Qu.: 2.000   Class :character  
-##  Mode  :character   Median :5.00   Median : 4.000   Mode  :character  
-##                     Mean   :4.81   Mean   : 4.192                     
-##                     3rd Qu.:7.00   3rd Qu.: 6.000                     
-##                     Max.   :8.00   Max.   :10.000                     
-##  show_stopper      
-##  Length:548        
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
-## </code></pre>
-<pre class="r"><code>results_df = read.csv(&quot;./gbb_datasets/results.csv&quot;, skip = 1,
+  relocate(baker)</code></pre>
+<p><strong>results_df:</strong></p>
+<ul>
+<li>Load results.csv;</li>
+</ul>
+<pre class="r"><code>results_df = read.csv(&quot;./gbb_datasets/results.csv&quot;, skip = 2,
                       na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
-  janitor::clean_names() 
-summary(results_df)</code></pre>
-<pre><code>##       x                 x_1                x_2                x_3           
-##  Length:1137        Length:1137        Length:1137        Length:1137       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      x_4           
-##  Length:1137       
-##  Class :character  
-##  Mode  :character</code></pre>
-<pre class="r"><code>viewers_df = read.csv(&quot;./gbb_datasets/viewers.csv&quot;, 
-                      na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
-  janitor::clean_names() 
-summary(viewers_df)</code></pre>
-<pre><code>##     episode         series_1        series_2        series_3    
-##  Min.   : 1.00   Min.   :2.240   Min.   :3.100   Min.   :3.850  
-##  1st Qu.: 3.25   1st Qu.:2.638   1st Qu.:3.583   1st Qu.:4.603  
-##  Median : 5.50   Median :2.875   Median :3.825   Median :4.765  
-##  Mean   : 5.50   Mean   :2.770   Mean   :3.951   Mean   :5.001  
-##  3rd Qu.: 7.75   3rd Qu.:3.000   3rd Qu.:4.293   3rd Qu.:5.287  
-##  Max.   :10.00   Max.   :3.030   Max.   :5.060   Max.   :6.740  
-##                  NA&#39;s   :4       NA&#39;s   :2                      
-##     series_4        series_5         series_6        series_7    
-##  Min.   :6.600   Min.   : 8.510   Min.   :11.09   Min.   :13.01  
-##  1st Qu.:6.853   1st Qu.: 9.087   1st Qu.:11.71   1st Qu.:13.16  
-##  Median :7.245   Median :10.040   Median :12.18   Median :13.37  
-##  Mean   :7.354   Mean   :10.039   Mean   :12.31   Mean   :13.56  
-##  3rd Qu.:7.410   3rd Qu.:10.273   3rd Qu.:12.38   3rd Qu.:13.45  
-##  Max.   :9.450   Max.   :13.510   Max.   :15.05   Max.   :15.90  
-##                                                                  
-##     series_8         series_9        series_10     
-##  Min.   : 8.550   Min.   : 8.670   Min.   : 8.700  
-##  1st Qu.: 8.627   1st Qu.: 8.910   1st Qu.: 8.965  
-##  Median : 8.980   Median : 9.265   Median : 9.225  
-##  Mean   : 9.017   Mean   : 9.298   Mean   : 9.242  
-##  3rd Qu.: 9.180   3rd Qu.: 9.537   3rd Qu.: 9.370  
-##  Max.   :10.040   Max.   :10.340   Max.   :10.050  
-## </code></pre>
+  mutate(baker = iconv(baker, from = &quot;latin1&quot;, to = &quot;UTF-8&quot;, sub = &quot;&quot;)) |&gt;
+  mutate(baker = trimws(baker)) |&gt;  # remove &quot; &quot;
+  janitor::clean_names() </code></pre>
+</div>
+<div id="check-the-completeness" class="section level3">
+<h3>3.2 Check the Completeness</h3>
+<ul>
+<li>Identify if any baker in <code>results_df</code> is missing from the
+<code>bakers_df</code>.</li>
+</ul>
+<pre class="r"><code>#anti_join(x, y, by = &quot;key&quot;)  x have while y donot have
+missing_bakers = anti_join(results_df, bakers_df, by = &quot;baker&quot;) 
+
+head(missing_bakers)</code></pre>
+<pre><code>##   series episode  baker technical     result
+## 1      2       1 Joanne        11         IN
+## 2      2       2 Joanne        10         IN
+## 3      2       3 Joanne         1         IN
+## 4      2       4 Joanne         8         IN
+## 5      2       5 Joanne         6         IN
+## 6      2       6 Joanne         1 STAR BAKER</code></pre>
+<p>The results show that Joanne’s series 2 episodes 1-6 is present in
+the <code>results_df</code>, but not in the <code>bakers_df</code>.</p>
+<ul>
+<li>Identify if any baker in <code>results_df</code> is missing from the
+<code>bakes_df</code>.</li>
+</ul>
+<pre class="r"><code>missing_bakes = anti_join(results_df, bakes_df, by = c(&quot;baker&quot;, &quot;episode&quot;)) 
+head(missing_bakers)</code></pre>
+<pre><code>##   series episode  baker technical     result
+## 1      2       1 Joanne        11         IN
+## 2      2       2 Joanne        10         IN
+## 3      2       3 Joanne         1         IN
+## 4      2       4 Joanne         8         IN
+## 5      2       5 Joanne         6         IN
+## 6      2       6 Joanne         1 STAR BAKER</code></pre>
+<p>The results confirm that Joanne is not recorded in
+<code>bakes_df</code> as well.</p>
 </div>
 <div id="merge-datasets" class="section level3">
-<h3>3.2 Merge Datasets</h3>
+<h3>3.3 Merge Datasets</h3>
 <pre class="r"><code># Merge datasets</code></pre>
+</div>
+<div id="section" class="section level3">
+<h3>3.4</h3>
+<pre class="r"><code>viewers_df = read.csv(&quot;./gbb_datasets/viewers.csv&quot;, 
+                      na = c(&quot;NA&quot;, &quot;.&quot;, &quot;&quot;)) |&gt;
+  janitor::clean_names() </code></pre>
 </div>
 </div>
 

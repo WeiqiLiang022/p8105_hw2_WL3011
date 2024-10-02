@@ -60,6 +60,7 @@ There are `r distinct_stations` distinct stations, identified by their name and 
 # the number of ADA compliant stations
 ada_compliant_stations = subway_df |>
   filter(ada == TRUE) |>
+  distinct(station_name, line) |>
   nrow()
 ```
 There are `r ada_compliant_stations` ADA compliant stations.

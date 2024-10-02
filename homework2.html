@@ -643,8 +643,9 @@ line.</p>
 <pre class="r"><code># the number of ADA compliant stations
 ada_compliant_stations = subway_df |&gt;
   filter(ada == TRUE) |&gt;
+  distinct(station_name, line) |&gt;
   nrow()</code></pre>
-<p>There are 468 ADA compliant stations.</p>
+<p>There are 84 ADA compliant stations.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>What proportion of station entrances / exits without vending allow
 entrance?</li>
